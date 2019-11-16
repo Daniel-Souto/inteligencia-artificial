@@ -1,0 +1,60 @@
+moeda_diferente([C|R],Pos,Peso):-
+    num_elementos([C|R],Y),
+    Y=12,
+    num_ocorrencias(C,[C|R],N),
+    N=1,
+    seg_pos([C|R],S),
+    num_ocorrencias(S,[C|R],M),
+    M=11,
+    Pos is 1,
+    peso_primeira([C|R],Peso).
+moeda_diferente([C|R],Pos,Peso):-
+    num_elementos([C|R],Y),
+    Y=12,
+    elemento_diferente(C,R,X),
+    X>0,
+    num_ocorrencias(X,[C|R],N),
+    N=1,
+    num_ocorrencias(C,[C|R],M),
+    M=11,
+    posicao([C|R],X,Pos),
+    compara(C,X,Peso).
+
+elemento_diferente(_,[],-1).
+elemento_diferente(C,[C|R],X):-
+    elemento_diferente(C,R,X).
+elemento_diferente(C,[C1|_],X):-
+    not(C=C1),
+    X is C1.
+
+compara(C,X,"Mais pesada!"):-
+    X>C.
+compara(C,X,"Mais leve!"):-
+    X<C.
+
+num_elementos([],0).
+num_elementos([_|R],N):-
+    num_elementos(R,N1),
+    N is N1 + 1.
+
+seg_pos([_,C2|_],C2).
+
+posicao([],_,-1).
+posicao([C|_],C,1).
+posicao([_|R],X,P):-
+    posicao(R,X,Posi),
+    Posi>0,
+    P is Posi + 1.
+
+num_ocorrencias(_,[],0).
+num_ocorrencias(X,[X|R],N):-
+    num_ocorrencias(X,R,N1),
+    N is N1 + 1.
+num_ocorrencias(X,[C|R],N):-
+    not(X=C),
+    num_ocorrencias(X,R,N).
+
+peso_primeira([C,X|_],"Mais pesada!"):-
+    C>X.
+peso_primeira([C,X|_],"Mais leve!"):-
+    C<X.
